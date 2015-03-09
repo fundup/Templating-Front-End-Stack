@@ -1,0 +1,20 @@
+{
+  "name": "FO",
+  "description": "Front End Templating",
+  "version": "0.0.0",
+  "private": true,
+  "contributors": [
+    "Boris Bruyere <boris.bruyere.web@gmail.com>"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "gulp": "3.8.11",
+    "gulp-changed": "1.1.1",
+    "gulp-stylus": "2.0.1",
+    "gulp-swig": "0.7.4",
+    "gulp-webserver": "0.9.0",
+    "opn": "1.0.1"
+  }
+}

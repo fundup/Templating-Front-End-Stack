@@ -1,0 +1,22 @@
+{
+  "name": "Grimpup",
+  "version": "0.0.0",
+  "directory": "dist/assets/lib",
+  "authors": [
+    "Boris Bruyère <boris.bruyere.web@gmail.com>"
+  ],
+  "description": "App Grimpup - Trouvez votre partenaire de grimpe",
+  "license": "MIT",
+  "homepage": "App",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "dist/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "*"
+  }
+}
