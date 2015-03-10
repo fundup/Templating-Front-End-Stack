@@ -21,3 +21,6 @@ Then run
 ``gulp``
 
 It will open your web browser with live reload.
+
+###TODO
+Minification
