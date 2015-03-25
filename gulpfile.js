@@ -4,21 +4,22 @@
 var gulp = require('gulp');
 var stylus = require('gulp-stylus');
 var swig = require('gulp-swig');
-var webserver = require('gulp-webserver');
 var changed   = require('gulp-changed'); // only move changed files
-var opn       = require('opn'); // for opening the browser
-
+var browserSync = require('browser-sync');
+var reload      = browserSync.reload;
 
 var sourcePaths = {
   styles:     ['assets/css/**/*.styl'],
   templates:  ['views/**/*.html', 'views/*.html'],
-  images:     ['assets/img/**/*']
+  images:     ['assets/images/**/*'],
+  javascripts:     ['assets/js/*']
 };
 
 var distPaths = {
   styles:     'dist/assets/css',
   templates:  'dist/',
-  images:     'dist/assets/img'
+  images:     'dist/assets/images',
+  javascripts: 'dist/assets/js'
 };
 
 var server = {
@@ -34,36 +35,32 @@ gulp.task('templates', function() {
         cache: false
       }
     }))
-    .pipe(gulp.dest( distPaths.templates ));
+    .pipe(gulp.dest( distPaths.templates ))
+    .pipe(reload({stream: true}));
 });
 
 //stylus
 gulp.task('stylus', function () {
-	gulp.src( sourcePaths.styles )
-		.pipe(stylus())
-		.pipe(gulp.dest( distPaths.styles ));
+  gulp.src( sourcePaths.styles )
+    .pipe(stylus())
+    .pipe(gulp.dest( distPaths.styles ))
+    .pipe(reload({stream: true}));
 });
 
 //img
 gulp.task('images', function () {
   gulp.src( sourcePaths.images )
     .pipe(changed( distPaths.images ))
-    .pipe(gulp.dest( distPaths.images ));
+    .pipe(gulp.dest( distPaths.images ))
+    .pipe(reload({stream: true}));
 });
 
-//server
-gulp.task('webserver', function() {
-  gulp.src( [distPaths.templates, '.']  )
-    .pipe(webserver({
-      host:             server.host,
-      port:             server.port,
-      livereload:       true,
-      directoryListing: false
-    }));
-});
-
-gulp.task('openbrowser', function() {
-  opn( 'http://' + server.host + ':' + server.port );
+//javascripts
+gulp.task('javascripts', function () {
+  gulp.src( sourcePaths.javascripts )
+    .pipe(changed( distPaths.javascripts ))
+    .pipe(gulp.dest( distPaths.javascripts ))
+    .pipe(reload({stream: true}));
 });
 
 // Rerun the task when a file changes
@@ -71,10 +68,22 @@ gulp.task('watch', function(){
   gulp.watch(sourcePaths.styles, ['stylus']);
   gulp.watch(sourcePaths.templates, ['templates']);
   gulp.watch(sourcePaths.images, ['images']);
+  //reload browser on change
+  gulp.watch(sourcePaths.javascripts, ['javascripts']);
+});
+
+// start server
+gulp.task('browser-sync', function() {
+    browserSync({
+        server: {
+            baseDir: './dist'
+        }
+    });
 });
 
 // The default task (run with just `gulp`) runs 'watch', and starts a local express server
-gulp.task('default', ['webserver', 'watch', 'images', 'openbrowser', 'images']);
+gulp.task('default', ['watch', 'images',
+                      'images', 'javascripts', 'browser-sync']);
 
 // The build task
-gulp.task('build', ['stylus', 'templates', 'images']);
+gulp.task('build', ['stylus', 'templates', 'images', 'javascripts']);
